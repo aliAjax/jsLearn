@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+
+<body>
+    <button id="btn">hahah</button>
+</body>
+<script type="text/javascript">
+
+    // 知识扫盲
+    // 下面例子A和B是否存在区别
+    // A:
+    // let fun = function () { }
+    // let obj = {
+    //     get: fun
+    // }
+
+    // // B：
+    // let obj = {
+    //     get: function () { }
+    // }
+
+    //结论：区别不大，参考下面代码,通过字面量创建对象
+    // var person = new Object();
+    // person.name = "jack";
+    // person.sayName = function () {
+    //     alert(this.name)
+    // }
+
+
+    /*
+      1.this在函数执行时产生，指向的是函数执行的上下文对象
+      2.谁调用这个函数，this指向谁（全局中执行函数时，等同window.fun()）
+      3.对象中调用方法，this指向当前对象
+      4.以构造函数调用时，this指向新创建的对象
+      5.call和apply将this指向绑定给其第一个参数所指向的对象，call(obj,num1,num2),apply(obj,[num1,num2]),绑定this并执行（也可理解为将次函数或方法暂时借给第一个参数指向的对象用）
+      6.bind()，将this绑定给其第一个参数所指向的对象，但不调用
+
+      特例：以函数形式调用时（即不属于任何对象或者构造函数），this指向window
+    */
+
+    // 特例
+    function w1() {
+        function w2() {
+            // console.log(this)//window
+        }
+        w2()
+    }
+    w1();
+
+    // 对象的形式调用
+    let obj = {
+        get() {
+            // console.log(this)//obj
+        }
+    }
+    obj.get()
+
+    //构造函数调用
+    function Person(name, age) {
+        this.name = name
+        this.age = age
+        this.get = function () {
+            // console.log(this)
+        }
+    }
+    let kobe = new Person("kebe", 12)
+    kobe.get()
+
+    //call和apply
+    let objca = {
+        name: "haha"
+    };
+    (function f1(a, b) {
+        // console.log(this,a,b)//objca,1,2
+    }).call(objca, 1, 2);
+    (function f1(a, b) {
+        // console.log(this,a,b)//objca,1,2
+    }).apply(objca, [1, 2])
+
+    //关于.bind(this)
+    function f1() {
+        // console.log(this)//window
+        let obj = {
+            // f2: function () {
+            //     console.log(this)//obj调用f2方法，所以this指向obj
+            // },
+            f2: function () {
+                // console.log(this)//在全局调用f1，所以f1中this指向window,bind(this)中this指向的是父级执行上下文中的this(即f1中的this),所以结果为window
+            }.bind(this)
+        }
+        obj.f2()
+    }
+    f1()
+
+    //当箭头函数(它的this会找其祖先级函数的this)，bind()都作用时
+    let obj1 = {
+        get1: function () {
+            console.log(this)//obj1
+        },
+        get2() {
+            console.log(this)//obj1 等同于上面 这是简写
+        },
+        get3: () => {
+            console.log(this)//window  待仔细思索
+        },
+        get4: function () {
+            return () => {
+                console.log(this)//obj1 
+            }
+        },
+        get5: function () {
+            return () => {
+                console.log(this)//window
+            }
+        }.bind(this)
+
+    };
+    // obj1.get1();
+    // obj1.get2();
+    // obj1.get3();
+    // obj1.get4()();
+    // obj1.get5()();
+
+
+
+    // let obj = {
+    //     get: function () { btn.onclick = () => console.log(this) }.bind(this),//window
+    //     get1: function () { btn.onclick = () => console.log(this) },//obj
+    //     set() {
+    //         console.log(this)//obj
+    //     },
+    //     post: () => console.log(this),//window,
+    //     test: function () {
+    //         console.log(this)//obj
+    //     }
+    // };
+
+    // console.log(btn.onclick)
+    // obj.get();
+    // console.log(obj.get)
+    // obj.set();
+    // obj.post();
+    // obj.test();
+    // obj.get1();
+    // console.log(btn.onclick)
+    // setTimeout(function(){console.log(this)},100)//window
+    // function foo() {
+        // 1.
+        // function f1(){
+        //     setTimeout(function(){console.log(this)},100)//window
+        // }
+        // f1()
+        // 2.
+        // setTimeout(function(){console.log(this)},100)//window window
+
+    // }
+    // foo()
+    // foo.call({name:"haha"})
+
+
+
+
+</script>
+
+</html>
