@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>执行上下文</title>
+</head>
+<body>
+    
+</body>
+<script type="text/javascript">
+    //*执行上下文：即作用域
+    //分类:
+        //全局级别得上下文：默认代码运行环境,js代码一旦载入，js引擎最先进入的环境
+        //函数级别的上下文：当执行一个函数的时候，会产生一个函数的上下文
+        //eval级别的上下文：当运行eval代码的时候，也会产生一个eval上下文
+    //特点:
+        //1.全局上下文只有一个，且全局上下文里面的变量能够被其他上下文所访问
+        //2.函数上下文的个数是没有限制的，每当我们调用执行一个函数时，JS引擎就会自动新建一个函数上下文
+        let sayHello="Hello";//全局上下文 sayHello person函数
+        function person(){//person 函数上下文
+            let first="Luck";
+            function firstPerson(){//firstPerson函数上下文
+                return first;
+            }
+        }
+
+    //*执行上下文的堆栈
+        //JS是一门单线程语言，单线程最大的特点：某一时段只能执行一段代码。如果这个时候有其他的代码需要执行，那么只能排队在后面等着
+        //当JS代码文件被载入时，默认最先进入的栈就是全局上下文。当在全局上下文中调用执行一个函数时，引擎会为其创建一个新的函数上下文，并且将其压入当前上下文堆栈的顶部。
+        //JS引擎总是执行当前堆栈顶部的上下文，一旦执行完毕，该上下文就会从堆栈的顶部弹出.
+        (function foo(i){
+            if(i==3){
+                return
+            }else{
+                console.log(i);
+                foo(++i)
+            }
+        })(0)
+        //全局上下文
+        //函数上下文f00(0) 0
+        //函数上下文f00(1) 1
+        //函数上下文f00(2) 2
+        //函数上下文f00(3) 
+
+    //*执行上下文的建立过程（比较底层的东西）
+        //预备知识：当函数调用的时候，就会有一个函数的执行上下文被创建.
+        //在JS引擎内部，函数上下文的创建具体分为两个部分：(a).建立阶段 (b).代码执行阶段
+    //(a).建立阶段：该阶段发生于函数调用的时候，但是是在执行函数代码之前
+        //建立变量，函数，arguments对象，确定形参
+        //建立作用域链
+        //确定this值
+    //(b).代码执行阶段：该阶段发生于执行代码的时候
+        //变量赋值
+        //函数引用
+        //执行其他代码
+    
+    //理解：上下文可以看成一个对象
+    //该对象的属性为：variableObject,scopeChain,this
+    // 示例：
+        executionContextObj={
+            variableObj:{/*函数中的arguments对象，形参，内部变量，函数*/},
+            scopeChain:{/*作用域链*/},
+            this:{}
+        }
+        //variableObj:变量对象，简称VO
+
+    //(a).建立阶段
+        //(1).建立arguments对象
+        //(2).建立形参
+        //(3).检查当前上下文中的函数声明，每找到一个函数声明（这里指的是普通形式声明的函数），就在VO下面新建一个函数名的属性，属性值就指向当前这个函数
+        //(4).循环早当前上下文中的变量，如果遇到和函数名相同的变量，直接跳过
+    //示例：
+        function foo(i){
+            var a="hello";
+            var b=function privateB(){};
+            function c(){};
+        };
+        foo(22)
+        //建立阶段：
+        fooExecutionContextObj={
+            variableObj:{
+                arguments:{
+                    0:22,
+                    length:1
+                },
+                i:22,
+                c:porter to function c(){},
+                a:undefined,
+                b:undefined
+            },
+            scopeChain:{...},
+            this:{...}
+        }
+        //代码执行阶段
+        fooExecutionContextObj={
+            variableObj:{
+                arguments:{
+                    0:22,
+                    length:1
+                },
+                i:22,
+                c:porter to function c(){},
+                a:"hello",
+                b:porter to privateB(){}
+            },
+            scopeChain:{...},
+            this:{...}
+        }
+        
+</script>
+
+</html>

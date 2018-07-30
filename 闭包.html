@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>闭包</title>
+</head>
+<body>
+    
+</body>
+<script type="text/javascript">
+    // 闭包(官方解释):一个拥有许多变量和绑定了这些变量的环境的表达式（通常是一个函数），因而这些变量也是该表达式的一部分。
+    //广义：所有函数都是闭包
+    //侠义：（1）函数中嵌套一个函数,并且内部函数要访问外部函数的变量
+          //（2）内部函数要被外部引用
+    //示例：
+    let outer=function (){
+        let a=100;
+        let inner = function (){
+            a++;
+            console.log(a);
+        };
+        return inner 
+    }
+    let func=outer();
+    func();//101
+    func();//102
+    func();//103
+    func();//104
+    //闭包特点：由于内部函数要对外部函数的变量进行引用，所以被引用的变量不会随着函数的结束而销毁，会一直保留下来
+</script>
+</html>

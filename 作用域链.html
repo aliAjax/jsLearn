@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>作用域链</title>
+</head>
+<body>
+    
+</body>
+<script type="text/javascript">
+    //作用域链：内部上下文所有的变量对象（包括父级的变量对象）的列表，用作变量查询
+    //关于作用域链，有一个公式
+        //作用域链（ScopeChain）=AO+[[scope]]
+        //AO：简单来说就是VO，AO全称active object(活动对象),对于函数上下文来讲，一般将其称之为AO，对于全局上下文，被称为VO
+        //[[scope]]:所有父级变量对象的层级列表（也被称之为层级链）
+        //示例：
+        var x=10;
+        function foo(){
+            var y=20;
+            console.log(x+y)
+        }
+        foo();//30
+        //全局
+        VO foo pointer to foo(){}
+           x
+        //函数上下文
+        AO y
+        ScopeChain=AO(y)+[[scope]](VO:x)
+        //[[scope]]有一个非常重要的特性：在函数创建的时候，就已经被存储了，是静态的，函数可以永远不被调用，但是[[scope]]在创建的时候就已经被写入了，并且储存在函数的作用域链对象里面
+        
+</script>
+
+</html>
